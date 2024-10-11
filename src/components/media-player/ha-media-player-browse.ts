@@ -566,15 +566,16 @@ export class HaMediaPlayerBrowse extends LitElement {
           <div class="thumbnail">
             ${child.thumbnail
               ? html`
-                  <div
+                  <img
+                    alt=${child.title}
                     class="${classMap({
                       "centered-image": ["app", "directory"].includes(
                         child.media_class
                       ),
                       "brand-image": isBrandUrl(child.thumbnail),
                     })} image"
-                    style="background-image: ${until(backgroundImage, "")}"
-                  ></div>
+                    src=${until(backgroundImage, "")}
+                  />
                 `
               : html`
                   <div class="icon-holder image">
@@ -644,9 +645,13 @@ export class HaMediaPlayerBrowse extends LitElement {
                 graphic: true,
                 thumbnail: mediaClass.show_list_images === true,
               })}
-              style="background-image: ${until(backgroundImage, "")}"
               slot="graphic"
             >
+              <img
+                alt=${child.title}
+                src=${until(backgroundImage, "")}
+                loading="lazy"
+              />
               ${child.can_play
                 ? html`<ha-icon-button
                     class="play ${classMap({
@@ -1067,27 +1072,22 @@ export class HaMediaPlayerBrowse extends LitElement {
         }
 
         ha-card .image {
-          border-radius: 3px 3px 0 0;
+          border-radius: var(--ha-card-border-radius, 12px);
+          padding: 4px;
+          box-sizing: border-box;
         }
 
         .image {
+          aspect-ratio: 1 / 1;
+          width: 100%;
           position: absolute;
-          top: 0;
-          right: 0;
-          left: 0;
-          bottom: 0;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: center;
-        }
-
-        .centered-image {
-          margin: 0 8px;
-          background-size: contain;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
         }
 
         .brand-image {
-          background-size: 40%;
+          width: 40%;
         }
 
         .children ha-card .icon-holder {
